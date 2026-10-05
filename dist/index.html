@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101311">
+  <meta name="description" content="Turn ASL fingerspelling into text with your webcam. Hand tracking and letter recognition run on your device.">
+  <title>Signlit — ASL to text</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%23101311'/%3E%3Cpath d='M10 10h12M10 16h8M10 22h12' stroke='%23c8f578' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="./styles.css">
+  <script type="module" src="./app.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <a class="wordmark" href="./" aria-label="Signlit home"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>signlit<span class="version">01</span></a>
+    <div class="header-right"><span class="privacy-label"><svg class="icon" aria-hidden="true"><use href="#lock-icon"/></svg>Camera stays on your device</span><a href="#sign-guide">Sign guide</a></div>
+  </header>
+  <main>
+    <section class="page-heading" aria-labelledby="page-title">
+      <div><p class="eyebrow">COMPUTER VISION · ASL FINGERSPELLING</p><h1 id="page-title">Hands to <span>words.</span></h1><p class="intro">Sign a letter. Hold it steady. Build your message.</p></div>
+      <div class="scope-note"><span class="scope-number">24</span><div>static letters<br><span>J &amp; Z can be added by hand</span></div></div>
+    </section>
+    <div class="workspace">
+      <section class="vision-panel" aria-label="Camera and recognition">
+        <div class="panel-heading"><h2><span class="small-index">01</span>Camera</h2><span id="camera-badge" class="badge">Camera off</span></div>
+        <div class="viewfinder" id="viewfinder">
+          <video id="webcam" playsinline muted aria-label="Live webcam preview" hidden></video>
+          <img id="sample-image" alt="Recorded ASL sample hand" hidden>
+          <canvas id="overlay" aria-hidden="true"></canvas>
+          <div class="camera-empty" id="camera-empty">
+            <div class="camera-glyph"><svg aria-hidden="true"><use href="#camera-icon"/></svg></div>
+            <h3>A little space for your hands.</h3>
+            <p>Face your palm toward the camera.<br>Keep one hand fully in the frame.</p>
+            <button id="start-camera" class="button primary"><svg class="icon" aria-hidden="true"><use href="#camera-icon"/></svg>Start camera</button>
+            <button id="sample-button" class="text-button">Try a recorded sample</button>
+            <span class="permission-note">Your browser will ask for camera access.</span>
+          </div>
+          <div id="camera-toolbar" class="camera-toolbar" hidden><span id="tracking-label">Looking for a hand</span><button id="stop-camera" class="button dark"><svg class="icon" aria-hidden="true"><use href="#stop-icon"/></svg>Stop</button></div>
+          <span class="corner top-left" aria-hidden="true"></span><span class="corner top-right" aria-hidden="true"></span><span class="corner bottom-left" aria-hidden="true"></span><span class="corner bottom-right" aria-hidden="true"></span>
+        </div>
+        <p id="error-message" class="error-message" role="alert" hidden></p>
+        <div class="prediction-panel">
+          <div class="detected-letter"><span class="eyebrow">CURRENT LETTER</span><span id="prediction-letter" class="letter">—</span></div>
+          <div class="prediction-detail"><div class="confidence-row"><span id="prediction-status">Ready when you are</span><strong id="confidence-label">—</strong></div><div class="confidence-track"><span id="confidence-bar"></span></div><div class="candidate-row" id="candidates"><span class="muted">Predictions appear here as you sign.</span></div><div class="hold-row"><span id="hold-label">Hold a sign to add a letter</span><span id="latency-label"></span></div><div class="hold-track"><span id="hold-bar"></span></div></div>
+        </div>
+        <div class="camera-bottom"><span><svg class="icon" aria-hidden="true"><use href="#lock-icon"/></svg>No video uploads</span><label class="checkbox-label"><input type="checkbox" id="show-landmarks" checked>Show hand tracking</label></div>
+      </section>
+      <section class="transcript-panel" aria-labelledby="transcript-title">
+        <div class="panel-heading"><h2 id="transcript-title"><span class="small-index">02</span>Your message</h2><span class="badge subtle" id="letter-count">0 characters</span></div>
+        <div class="transcript-body"><label class="sr-only" for="transcript">Your message. Edit recognized text here.</label><textarea id="transcript" placeholder="Your signs become text here…" spellcheck="false" maxlength="5000"></textarea><p class="edit-note">Click anywhere to edit or correct your message.</p></div>
+        <div class="text-controls"><button id="add-space" class="button secondary">Space<span class="keycap" aria-hidden="true">␣</span></button><button id="repeat-letter" class="button secondary" disabled>Repeat<span class="keycap" aria-hidden="true">R</span></button><button id="backspace" class="button secondary" aria-label="Delete previous character"><svg class="icon" aria-hidden="true"><use href="#backspace-icon"/></svg></button><button id="clear-text" class="text-button">Clear</button></div>
+        <div class="copy-row"><p id="transcript-status" role="status" aria-live="polite">Waiting for your first letter</p><button id="copy-text" class="button primary" disabled><svg class="icon" aria-hidden="true"><use href="#copy-icon"/></svg>Copy text</button></div>
+        <div class="recognition-settings"><div class="settings-heading"><h3>Make it work for you</h3><label class="switch"><input id="auto-add" type="checkbox" checked><span aria-hidden="true"></span>Auto-add letters</label></div><div class="setting-row"><label for="hold-time">Hold time</label><output for="hold-time" id="hold-value">0.8 s</output><input type="range" id="hold-time" min="400" max="2000" step="100" value="800"></div><div class="setting-row"><label for="confidence-threshold">Minimum model score</label><output for="confidence-threshold" id="threshold-value">80%</output><input type="range" id="confidence-threshold" min="50" max="95" step="5" value="80"></div><button id="add-current" class="button secondary full-width" disabled>Add current letter</button><p class="settings-note">Lower your hand briefly between repeated letters, or use Repeat. Model scores are estimates, not accuracy guarantees.</p></div>
+      </section>
+    </div>
+    <section class="guide-panel" id="sign-guide" aria-labelledby="guide-title"><div class="guide-heading"><div><p class="eyebrow">A QUICK REFERENCE</p><h2 id="guide-title">One letter at a time.</h2></div><p>Choose a letter for a handshape reminder.</p></div><div class="alphabet-grid" id="alphabet-grid" aria-label="ASL alphabet guide"></div><div class="guide-description"><span id="guide-letter">A</span><p id="guide-description">Make a fist with your thumb resting along the side of your index finger. Keep your palm facing forward.</p></div><p class="scope-disclaimer">This prototype recognizes isolated fingerspelling handshapes, not conversational ASL, grammar, or facial expressions. J and Z require motion and are excluded from automatic recognition. Results vary with lighting, camera angle, and signer.</p></section>
+  </main>
+  <footer><span>signlit <span class="muted">/</span> a computer vision experiment</span><span>MediaPipe + ONNX · runs in your browser</span></footer>
+  <svg class="svg-defs" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs>
+    <symbol id="camera-icon" viewBox="0 0 24 24"><path d="M14 8 20 5v14l-6-3M4 6h10v12H4z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></symbol>
+    <symbol id="lock-icon" viewBox="0 0 24 24"><rect x="6" y="10" width="12" height="10" rx="2" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M8 10V7a4 4 0 0 1 8 0v3M12 14v2" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></symbol>
+    <symbol id="copy-icon" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M16 8V4H4v12h4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></symbol>
+    <symbol id="backspace-icon" viewBox="0 0 24 24"><path d="M9 5h12v14H9l-7-7 7-7Zm3 4 6 6m0-6-6 6" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="stop-icon" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2" fill="currentColor"/></symbol>
+  </defs></svg>
+</body>
+</html>

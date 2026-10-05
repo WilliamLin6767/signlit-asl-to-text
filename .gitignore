@@ -1,0 +1,12 @@
+node_modules/
+.sites-runtime/
+.env
+.env.*
+!.env.example
+__pycache__/
+.venv/
+.DS_Store
+artifacts/
+dist/vendor/
+dist/models/*.onnx
+dist/models/*.task

@@ -1,0 +1,19 @@
+{
+  "model_revision": "45ff2c0e26925c50f4546073bd573fe3ca7a5e6e",
+  "mediapipe": "0.10.21",
+  "onnxruntime_web": "1.22.0",
+  "files": {
+    "models/asl_cnn_model.onnx": "c3843cabc57032080a81e5995b578139c90631080af1e6d070df1c6dfdc1172b",
+    "models/hand_landmarker.task": "fbc2a30080c3c557093b5ddfc334698132eb341044ccee322ccf8bcf3607cde1",
+    "vendor/mediapipe/LICENSE": "8707eef0533987efc5b155d64761eeb6e20793f50b9bd1a68dad1cf4719d0ed8",
+    "vendor/mediapipe/vision_bundle.mjs": "40f4123dfcd75cfa58add046919cc6f52fde66f009ff582997c09ba54c6ba27c",
+    "vendor/mediapipe/wasm/vision_wasm_internal.js": "4a97e2520ba506c680ecd6ba6acfb146888afa0e2746d57f205352bc6ebb82eb",
+    "vendor/mediapipe/wasm/vision_wasm_internal.wasm": "f00ec4731faa23b3e714d00e88d4d10e2df5c0a427d3a2b4ae6e3526fdd14ef7",
+    "vendor/mediapipe/wasm/vision_wasm_nosimd_internal.js": "927def7b465c51b86e4b3060f93646aca4e27121f4b8fc0483786e407ea9cf1f",
+    "vendor/mediapipe/wasm/vision_wasm_nosimd_internal.wasm": "3821ea9b1f7fb8c549ef2a064ef5c85750bf375c545a49fd6eea0df44a95f1f4",
+    "vendor/ort/LICENSE": "2f07c72751aed99790b8a4869cf2311df85a860b22ded05fa22803587a48922c",
+    "vendor/ort/ort-wasm-simd-threaded.mjs": "30dd851d9c00622940500f71ddd2ff8820c5cb65270816080175b958705385a8",
+    "vendor/ort/ort-wasm-simd-threaded.wasm": "71aef04959c5c1b6de461b6538e2058e306610034a85aad2742d0c7fd4533fe4",
+    "vendor/ort/ort.wasm.min.mjs": "6ef726f355b791129f7ddf3f62e7877a16b9b777abe87004b8ab306e6b9cf265"
+  }
+}

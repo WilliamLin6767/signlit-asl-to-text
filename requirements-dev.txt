@@ -1,0 +1,4 @@
+# Only for regenerating the recorded samples; not needed to run the web app.
+mediapipe==0.10.21
+numpy<2
+opencv-contrib-python>=4.8,<5

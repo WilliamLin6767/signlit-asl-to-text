@@ -1,0 +1,23 @@
+{
+  "name": "signlit-asl-to-text",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Browser-based ASL fingerspelling with MediaPipe and an ONNX neural network",
+  "scripts": {
+    "dev": "node scripts/serve.mjs",
+    "start": "node scripts/serve.mjs",
+    "setup": "python3 scripts/setup_assets.py",
+    "test": "node --test tests/*.test.mjs",
+    "check": "node scripts/check.mjs",
+    "test:vision": "node scripts/vision_smoke.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "devDependencies": {
+    "@napi-rs/canvas": "^1.0.10",
+    "happy-dom": "^20.14.5",
+    "onnxruntime-web": "^1.22.0"
+  }
+}
