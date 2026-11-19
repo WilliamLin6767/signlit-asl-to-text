@@ -2,9 +2,19 @@
   "model_revision": "45ff2c0e26925c50f4546073bd573fe3ca7a5e6e",
   "mediapipe": "0.10.21",
   "onnxruntime_web": "1.22.0",
+  "transformers": "4.3.2",
+  "transformers_onnxruntime_web": "1.31.0-dev.20260914-8d85527a0",
+  "whisper_revision": "95bf40a508535962c6483ead40270b2e32267508",
   "files": {
     "models/asl_cnn_model.onnx": "c3843cabc57032080a81e5995b578139c90631080af1e6d070df1c6dfdc1172b",
     "models/hand_landmarker.task": "fbc2a30080c3c557093b5ddfc334698132eb341044ccee322ccf8bcf3607cde1",
+    "models/whisper/Xenova/whisper-base.en/config.json": "5c390f2c6ba84ddeb7e362cd8b2123832911407850174e64d7081ccc36df2d64",
+    "models/whisper/Xenova/whisper-base.en/generation_config.json": "1e57ed56ad1bd7f08a49ece7fe7daada674573805a35f8bdbbe68380aab5b1ee",
+    "models/whisper/Xenova/whisper-base.en/onnx/decoder_model_merged_quantized.onnx": "a25afc5858a20aabb7652cb2d555996ebe10691a69bbdb423d5073d52f060325",
+    "models/whisper/Xenova/whisper-base.en/onnx/encoder_model_quantized.onnx": "d0d4e59e2842617b39787cece73d7e8f76f99b1697d3386c0e682eca2269f4a1",
+    "models/whisper/Xenova/whisper-base.en/preprocessor_config.json": "a6a76d28c93edb273669eb9e0b0636a2bddbb1272c3261e47b7ca6dfdbac1b8d",
+    "models/whisper/Xenova/whisper-base.en/tokenizer.json": "c6ee8f089220a5b1188f6426456772572671c6141ae007eecb83c6a8349f5deb",
+    "models/whisper/Xenova/whisper-base.en/tokenizer_config.json": "e082c1ad251541bf277967a703252cddd4bb37a71a43737e03d050c22ec08238",
     "vendor/mediapipe/LICENSE": "8707eef0533987efc5b155d64761eeb6e20793f50b9bd1a68dad1cf4719d0ed8",
     "vendor/mediapipe/vision_bundle.mjs": "40f4123dfcd75cfa58add046919cc6f52fde66f009ff582997c09ba54c6ba27c",
     "vendor/mediapipe/wasm/vision_wasm_internal.js": "4a97e2520ba506c680ecd6ba6acfb146888afa0e2746d57f205352bc6ebb82eb",
@@ -14,6 +24,10 @@
     "vendor/ort/LICENSE": "2f07c72751aed99790b8a4869cf2311df85a860b22ded05fa22803587a48922c",
     "vendor/ort/ort-wasm-simd-threaded.mjs": "30dd851d9c00622940500f71ddd2ff8820c5cb65270816080175b958705385a8",
     "vendor/ort/ort-wasm-simd-threaded.wasm": "71aef04959c5c1b6de461b6538e2058e306610034a85aad2742d0c7fd4533fe4",
-    "vendor/ort/ort.wasm.min.mjs": "6ef726f355b791129f7ddf3f62e7877a16b9b777abe87004b8ab306e6b9cf265"
+    "vendor/ort/ort.wasm.min.mjs": "6ef726f355b791129f7ddf3f62e7877a16b9b777abe87004b8ab306e6b9cf265",
+    "vendor/transformers/LICENSE": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+    "vendor/transformers/ort-wasm-simd-threaded.asyncify.mjs": "0966b6105cd936744498aa60df7a22cbd47af3374dbc64a9ab561c08a71e3611",
+    "vendor/transformers/ort-wasm-simd-threaded.asyncify.wasm": "49871f5a4409519797e127440868a6d1923339d9185907f301a5b2a1d90af082",
+    "vendor/transformers/transformers.min.js": "8b5a3171f8876bab2b1820a7d65eb87628e3d30bb5ea85b9dd398e76eb34decb"
   }
 }

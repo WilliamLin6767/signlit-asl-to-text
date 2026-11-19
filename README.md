@@ -15,9 +15,11 @@ npm start
 ```
 
 Open **http://localhost:5173**. Use a current Chrome, Edge, or Firefox browser
-with WebAssembly, Web Workers, OffscreenCanvas, and camera support. The first
-setup downloads approximately 40 MB of model/runtime assets. After setup the
-recognition assets are served from your own app.
+with WebAssembly, Web Workers, OffscreenCanvas, and camera support, plus
+microphone and AudioWorklet support for speech to text. Setup stores
+approximately 140 MB of model/runtime assets, about 100 MB of which is the
+speech model and its runtime. After setup the recognition assets are served
+from your own app.
 
 Use `PORT=3000 npm start` to choose another local port. There are no required
 environment variables. Open the app through a server, not `file://`.
@@ -30,6 +32,20 @@ npm test
 npm run check
 npm run test:vision
 ```
+
+## Speech to text
+
+The **Speech to text** panel lets a hearing person talk back. Click **Start
+listening**, allow the microphone, stay quiet for a second while it measures
+the room, then talk. Each phrase appears when you pause. **Add to message**
+puts it in the message box. **Fingerspell** breaks it into letters that open
+in the sign guide.
+
+Recognition is OpenAI's Whisper (base.en, quantized) running in a Web Worker
+with Transformers.js. Audio never leaves your device, and there is no server
+to start. It is English only. Short phrases take a moment to appear,
+and speed depends on the device. Background noise, quiet speech, and names
+can cause mistakes, so check the text before relying on it.
 
 ## Use it
 
@@ -82,6 +98,14 @@ MediaPipe 0.10.21 uses `importScripts` for its WASM factory, which is prohibited
 in module workers. ONNX uses a single WASM thread, so the app does not require
 cross-origin isolation headers.
 
+Speech runs in a separate **module worker** (`speech-worker.js`). The
+microphone is captured with an AudioWorklet, split into phrases by an energy
+threshold calibrated to the room, resampled to 16 kHz, then transcribed by
+Whisper through Transformers.js 4.3.2 and the ONNX Runtime Web build it is
+pinned to. The page is not cross-origin isolated (`scripts/serve.mjs` sends no
+isolation headers), so this also runs on a single WASM thread. The first
+**Start listening** loads about 105 MB into the browser.
+
 The pretrained classifier is by **Nicolás Florentín**. Signlit does not claim
 to have trained that network or to reproduce its published accuracy numbers.
 See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) for attribution, source
@@ -96,6 +120,11 @@ dist/                    Served website
   core.js                Geometry, softmax, temporal decoder
   renderer.js            Skeleton rendering and model tensor preparation
   vision-worker.js       MediaPipe and ONNX inference
+  speech.js              Speech to text panel: microphone, phrases, actions
+  speech-core.js         Phrase detection and transcript cleanup (no DOM)
+  speech-worker.js       Whisper inference with Transformers.js
+  mic-worklet.js         AudioWorklet that forwards microphone samples
+  speech.css             Speech to text panel styles
   samples/               CC0 photo sample and recorded landmarks
 scripts/
   setup_assets.py        Pinned, checksum-verified asset downloader
@@ -104,6 +133,7 @@ scripts/
   vision_smoke.mjs        Real ONNX WASM inference smoke check
   make_samples.py        Reproduce photographed landmark fixtures
 tests/                   Decoder, DOM interaction, and landmark fixtures
+  speech.test.mjs        Phrase detection and transcript cleanup
 assets-lock.json         Asset versions and SHA-256 checksums
 ```
 
@@ -143,12 +173,12 @@ predictions still pass through the same runtime and decoder as webcam signs.
 ## Host it
 
 Run `npm run setup`, then deploy **the contents of `dist/`** to an HTTPS static
-host. Serve `.wasm` as `application/wasm` and `.mjs` as JavaScript. Camera access
-requires HTTPS in production. Use relative paths to support deployment under
+host. Serve `.wasm` as `application/wasm` and `.mjs` as JavaScript. Camera and
+microphone access require HTTPS in production. Use relative paths to support deployment under
 a repository subdirectory. Preserve the directory structure, including
 `vendor/`, `models/`, and `samples/`.
 
-No server sees video or transcript text. The page loads Google Fonts; if you
+No server sees video, audio, or transcript text. The page loads Google Fonts; if you
 need to eliminate that network request, remove the CSS font import and use the
 existing system-font fallbacks.
 

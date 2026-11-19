@@ -1,0 +1,20 @@
+/* Speech to text panel. Uses the same tokens as styles.css. */
+.speech-panel{margin-top:22px;border:1px solid var(--border);border-radius:var(--radius);background:var(--panel);overflow:hidden}
+.speech-body{padding:20px 24px 22px}
+.speech-controls{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.speech-controls .text-button{margin-left:auto}
+.speech-status{margin:14px 0 0;font-size:14px;color:var(--muted)}
+.speech-empty{margin:18px 0 0;padding:18px;border:1px dashed var(--border);border-radius:10px;color:#7f8c7b;font-size:14px}
+.speech-lines{list-style:none;margin:16px 0 0;padding:0;display:flex;flex-direction:column;gap:10px;max-height:420px;overflow-y:auto}
+.speech-lines:empty{margin:0}
+.speech-line{border:1px solid var(--border);border-radius:10px;background:var(--panel-light);padding:14px 16px 10px}
+.speech-text{margin:0;font-family:'Space Grotesk',sans-serif;font-size:22px;letter-spacing:-.3px;line-height:1.35;overflow-wrap:anywhere}
+.speech-actions{display:flex;gap:18px;margin-top:4px}
+.speech-actions .text-button{padding:6px 0;font-size:13px}
+.speech-actions .text-button[aria-expanded=true]{color:var(--green)}
+.spell-row{display:flex;flex-wrap:wrap;gap:12px;padding:8px 0 6px}
+.spell-word{display:flex;flex-wrap:wrap;gap:4px}
+.spell-letter{width:32px;height:36px;padding:0;border-radius:6px;background:#222a22;border:1px solid #3a4535;color:var(--text);font-family:'Space Grotesk',sans-serif;font-size:16px}
+.spell-letter:hover{background:#36432e;color:var(--green)}
+@media(max-width:760px){.speech-body{padding:18px 18px 20px}.speech-text{font-size:19px}}
+@media(max-width:400px){.speech-body{padding:16px 14px 18px}.speech-controls .button{width:100%}.speech-controls .text-button{margin-left:0}}

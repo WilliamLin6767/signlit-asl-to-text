@@ -10,3 +10,4 @@ artifacts/
 dist/vendor/
 dist/models/*.onnx
 dist/models/*.task
+dist/models/whisper/
