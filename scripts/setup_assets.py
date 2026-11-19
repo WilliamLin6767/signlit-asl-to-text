@@ -4,6 +4,9 @@
 The generated runtime files are not committed. Package archives are verified
 against npm's pinned SHA-512 integrity values, and individual outputs against
 assets-lock.json when present. No credentials or API keys are needed.
+
+Speech to text adds Transformers.js, the ONNX Runtime Web build it is pinned
+to, and the quantized Whisper base.en model: about 100 MB more on disk.
 """
 from __future__ import annotations
 import base64
@@ -19,6 +22,21 @@ ROOT = Path(__file__).resolve().parents[1]
 DIST = ROOT / 'dist'
 LOCK = ROOT / 'assets-lock.json'
 MODEL_REV = '45ff2c0e26925c50f4546073bd573fe3ca7a5e6e'
+TRANSFORMERS_VERSION = '4.3.2'
+# transformers.min.js bundles this exact ONNX Runtime Web build (the version in
+# its package.json). Its WASM binary and loader must come from the same build.
+TRANSFORMERS_ORT_VERSION = '1.31.0-dev.20260914-8d85527a0'
+WHISPER_REPO = 'Xenova/whisper-base.en'
+WHISPER_REV = '95bf40a508535962c6483ead40270b2e32267508'
+WHISPER_FILES = [
+    'config.json',
+    'generation_config.json',
+    'preprocessor_config.json',
+    'tokenizer.json',
+    'tokenizer_config.json',
+    'onnx/encoder_model_quantized.onnx',
+    'onnx/decoder_model_merged_quantized.onnx',
+]
 PACKAGES = [
     {
         'name': 'mediapipe',
@@ -42,10 +60,31 @@ PACKAGES = [
             'package/dist/ort-wasm-simd-threaded.wasm': 'vendor/ort/ort-wasm-simd-threaded.wasm',
         },
     },
+    {
+        'name': 'transformers',
+        'url': f'https://registry.npmjs.org/@huggingface/transformers/-/transformers-{TRANSFORMERS_VERSION}.tgz',
+        'integrity': 'V3+dqf3iWlRYJ9I9GreM3zGQd0lAXnnoPeddmkOQYWAEE4l/+Fi6p7tx/qVUJlKQgLXGim2W76rTOzz+eC0i7g==',
+        'files': {
+            'package/dist/transformers.min.js': 'vendor/transformers/transformers.min.js',
+        },
+    },
+    {
+        'name': 'transformers-ort',
+        'url': f'https://registry.npmjs.org/onnxruntime-web/-/onnxruntime-web-{TRANSFORMERS_ORT_VERSION}.tgz',
+        'integrity': 'Iy7rtadoBgxS/LLvDr3QW38DB1PNXRnr0GJMcL0TAt7c9qjgVQl83UlGCVyeAnK2InpmW8Uc3PL8XIuqtDeF6g==',
+        'files': {
+            'package/dist/ort-wasm-simd-threaded.asyncify.mjs': 'vendor/transformers/ort-wasm-simd-threaded.asyncify.mjs',
+            'package/dist/ort-wasm-simd-threaded.asyncify.wasm': 'vendor/transformers/ort-wasm-simd-threaded.asyncify.wasm',
+        },
+    },
 ]
 MODELS = {
     'models/asl_cnn_model.onnx': f'https://raw.githubusercontent.com/punpuniacitizen/MediaPipe-ASL-sign-language-recognition/{MODEL_REV}/asl_cnn_model.onnx',
     'models/hand_landmarker.task': 'https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task',
+}
+MODELS |= {
+    f'models/whisper/{WHISPER_REPO}/{name}': f'https://huggingface.co/{WHISPER_REPO}/resolve/{WHISPER_REV}/{name}'
+    for name in WHISPER_FILES
 }
 NOTICES = {
     'vendor/mediapipe/LICENSE': 'https://raw.githubusercontent.com/google-ai-edge/mediapipe/v0.10.21/LICENSE',
@@ -58,7 +97,7 @@ def sha256(data: bytes) -> str:
 
 def download(url: str) -> bytes:
     req = urllib.request.Request(url, headers={'User-Agent': 'Signlit-asset-setup/1.0'})
-    with urllib.request.urlopen(req, timeout=60) as response:
+    with urllib.request.urlopen(req, timeout=120) as response:
         return response.read()
 
 def is_valid(path: str) -> bool:
@@ -120,7 +159,7 @@ def main() -> None:
         for job in concurrent.futures.as_completed(jobs):
             outputs.update(job.result())
     if not LOCK.exists():
-        LOCK.write_text(json.dumps({'model_revision': MODEL_REV, 'mediapipe': '0.10.21', 'onnxruntime_web': '1.22.0', 'files': dict(sorted(outputs.items()))}, indent=2) + '\n')
+        LOCK.write_text(json.dumps({'model_revision': MODEL_REV, 'mediapipe': '0.10.21', 'onnxruntime_web': '1.22.0', 'transformers': TRANSFORMERS_VERSION, 'transformers_onnxruntime_web': TRANSFORMERS_ORT_VERSION, 'whisper_revision': WHISPER_REV, 'files': dict(sorted(outputs.items()))}, indent=2) + '\n')
     print('Signlit runtime assets are ready. Run npm start.', flush=True)
 
 if __name__ == '__main__':

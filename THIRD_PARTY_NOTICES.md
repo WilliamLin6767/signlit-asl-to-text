@@ -51,6 +51,24 @@ SOFTWARE.
   https://github.com/microsoft/onnxruntime
 - Runtime license files are retained in each vendor directory during setup.
 
+## Speech recognition
+
+- Transformers.js (`@huggingface/transformers` 4.3.2): Hugging Face,
+  Apache-2.0. https://github.com/huggingface/transformers.js
+  Its license file is retained in `vendor/transformers/` during setup.
+- ONNX Runtime Web build `1.31.0-dev.20260914-8d85527a0`, bundled into
+  `transformers.min.js`, with its WASM loader and binary vendored alongside:
+  Microsoft, MIT (as declared in that npm package's `package.json`). The npm
+  package does not ship a license file.
+- Whisper base.en: OpenAI. The upstream repository states that Whisper's code
+  and model weights are released under the MIT License.
+  https://github.com/openai/whisper
+- ONNX conversion used here: https://huggingface.co/Xenova/whisper-base.en,
+  pinned to revision `95bf40a508535962c6483ead40270b2e32267508`. Its model
+  card, and the card for https://huggingface.co/openai/whisper-base.en, list
+  the license as Apache-2.0.
+- Weights are downloaded by the setup script and excluded from source commits.
+
 ## Recorded demonstration
 
 - Handshape photographs: ASL Dataset by Ayush Thakur, CC0-1.0.
@@ -62,4 +80,4 @@ SOFTWARE.
 ## Fonts
 
 DM Sans and Space Grotesk are served by Google Fonts under the SIL Open Font
-License. Camera video and transcripts are never sent to Google Fonts.
+License. Camera video, audio, and transcripts are never sent to Google Fonts.

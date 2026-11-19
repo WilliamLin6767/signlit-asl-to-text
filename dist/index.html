@@ -9,6 +9,8 @@
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%23101311'/%3E%3Cpath d='M10 10h12M10 16h8M10 22h12' stroke='%23c8f578' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="./styles.css">
   <script type="module" src="./app.js"></script>
+  <link rel="stylesheet" href="./speech.css">
+  <script type="module" src="./speech.js"></script>
 </head>
 <body>
   <header class="site-header">
@@ -53,6 +55,15 @@
         <div class="recognition-settings"><div class="settings-heading"><h3>Make it work for you</h3><label class="switch"><input id="auto-add" type="checkbox" checked><span aria-hidden="true"></span>Auto-add letters</label></div><div class="setting-row"><label for="hold-time">Hold time</label><output for="hold-time" id="hold-value">0.8 s</output><input type="range" id="hold-time" min="400" max="2000" step="100" value="800"></div><div class="setting-row"><label for="confidence-threshold">Minimum model score</label><output for="confidence-threshold" id="threshold-value">80%</output><input type="range" id="confidence-threshold" min="50" max="95" step="5" value="80"></div><button id="add-current" class="button secondary full-width" disabled>Add current letter</button><p class="settings-note">Lower your hand briefly between repeated letters, or use Repeat. Model scores are estimates, not accuracy guarantees.</p></div>
       </section>
     </div>
+    <section class="speech-panel" id="speech-panel" aria-labelledby="speech-title">
+      <div class="panel-heading"><h2 id="speech-title"><span class="small-index">03</span>Speech to text</h2><span id="speech-badge" class="badge">Mic off</span></div>
+      <div class="speech-body">
+        <div class="speech-controls"><button id="speech-toggle" class="button primary">Start listening</button><button id="speech-clear" class="text-button" disabled>Clear</button></div>
+        <p id="speech-status" class="speech-status" role="status" aria-live="polite">Runs on your device. Audio is never uploaded.</p>
+        <p id="speech-empty" class="speech-empty">Spoken words show up here. Add them to your message, or tap Fingerspell to see how to sign each letter.</p>
+        <ol id="speech-lines" class="speech-lines" aria-label="Spoken phrases"></ol>
+      </div>
+    </section>
     <section class="guide-panel" id="sign-guide" aria-labelledby="guide-title"><div class="guide-heading"><div><p class="eyebrow">A QUICK REFERENCE</p><h2 id="guide-title">One letter at a time.</h2></div><p>Choose a letter for a handshape reminder.</p></div><div class="alphabet-grid" id="alphabet-grid" aria-label="ASL alphabet guide"></div><div class="guide-description"><span id="guide-letter">A</span><p id="guide-description">Make a fist with your thumb resting along the side of your index finger. Keep your palm facing forward.</p></div><p class="scope-disclaimer">This prototype recognizes isolated fingerspelling handshapes, not conversational ASL, grammar, or facial expressions. J and Z require motion and are excluded from automatic recognition. Results vary with lighting, camera angle, and signer.</p></section>
   </main>
   <footer><span>signlit <span class="muted">/</span> a computer vision experiment</span><span>MediaPipe + ONNX · runs in your browser</span></footer>

@@ -11,8 +11,9 @@ const server=createServer(async(req,res)=>{
     const pathname=decodeURIComponent(new URL(req.url,'http://localhost').pathname);
     const path=resolve(root,'.'+pathname+(pathname.endsWith('/')?'index.html':''));
     if(!path.startsWith(root.endsWith(sep)?root:root+sep)){res.writeHead(403);res.end('Forbidden');return;}
-    if(!(await stat(path)).isFile()){res.writeHead(404);res.end('Not found');return;}
-    res.writeHead(200,{'Content-Type':mime[extname(path)]||'application/octet-stream','X-Content-Type-Options':'nosniff','Cache-Control':'no-cache'});
+    const info=await stat(path);
+    if(!info.isFile()){res.writeHead(404);res.end('Not found');return;}
+    res.writeHead(200,{'Content-Type':mime[extname(path)]||'application/octet-stream','Content-Length':info.size,'X-Content-Type-Options':'nosniff','Cache-Control':'no-cache'});
     if(req.method==='HEAD'){res.end();return;}
     if(req.method!=='GET'){res.writeHead(405);res.end('Method not allowed');return;}
     res.end(await readFile(path));
